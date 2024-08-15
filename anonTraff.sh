@@ -1,14 +1,22 @@
 #!/bin/bash
 
+# Colores para el terminal
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+BLUE="\033[1;34m"
+CYAN="\033[1;36m"
+RESET="\033[0m"
+
 # Función para manejar la interrupción con Ctrl+C
 cleanup() {
-    echo -e "\n[!] Interrupción detectada. Restaurando el estado original de Tor..."
+    echo -e "\n${YELLOW}[!] Interrupción detectada. Restaurando el estado original de Tor...${RESET}"
     if [ "$TOR_STATUS" == "active" ]; then
         sudo systemctl start tor
-        echo "[!] Tor se ha restaurado al estado activo."
+        echo -e "${GREEN}[!] Tor se ha restaurado al estado activo.${RESET}"
     else
         sudo systemctl stop tor
-        echo "[!] Tor se ha restaurado al estado inactivo."
+        echo -e "${RED}[!] Tor se ha restaurado al estado inactivo.${RESET}"
     fi
     exit 0
 }
@@ -16,40 +24,40 @@ cleanup() {
 # Capturar la señal SIGINT (Ctrl+C)
 trap cleanup SIGINT
 
-echo -e "\033[1;32;40m
+# Banner
+echo -e "${CYAN}
     _   _                       _______          __  __ 
    / \ | | __ _ _ __ ___   __ _ |__   __|_ _ __  |  \/  |
-  / _ \| |/ _` | '_ ` _ \ / _` |   | |/ _` | '_ \ | |\/| |
+  / _ \| |/ _\` | '_ \` _ \ / _\` |   | |/ _\` | '_ \ | |\/| |
  / ___ \ | (_| | | | | | | (_| |   | | (_| | | | || |  | |
 /_/   \_\_\__,_|_| |_| |_|\__,_|   |_|\__,_|_| |_||_|  |_|
-
-\033[1;40;31m
+${RESET}${RED}
               AnonTraff - Dynamic Tor IP Changer
-\033[1;32;40m
+${RESET}${CYAN}
 "
 
 # Comprobar si pip3 está instalado
 if ! dpkg -s python3-pip &>/dev/null; then
-    echo "[+] pip3 no está instalado"
+    echo -e "${YELLOW}[+] pip3 no está instalado${RESET}"
     sudo apt update
     sudo apt install python3-pip -y
-    echo "[!] pip3 instalado correctamente"
+    echo -e "${GREEN}[!] pip3 instalado correctamente${RESET}"
 fi
 
 # Comprobar si requests está instalado
 if ! python3 -c "import requests" &>/dev/null; then
-    echo "[+] python3 requests no está instalado"
+    echo -e "${YELLOW}[+] python3 requests no está instalado${RESET}"
     pip3 install requests
     pip3 install requests[socks]
-    echo "[!] python3 requests está instalado"
+    echo -e "${GREEN}[!] python3 requests está instalado${RESET}"
 fi
 
 # Comprobar si tor está instalado
 if ! which tor &>/dev/null; then
-    echo "[+] tor no está instalado"
+    echo -e "${YELLOW}[+] tor no está instalado${RESET}"
     sudo apt update
     sudo apt install tor -y
-    echo "[!] tor instalado correctamente"
+    echo -e "${GREEN}[!] tor instalado correctamente${RESET}"
 fi
 
 clear
@@ -63,22 +71,21 @@ sleep 3
 
 # Función para obtener la IP externa
 ma_ip() {
-    local url="https://www.myexternalip.com/raw"
-    local get_ip=$(python3 -c "import requests; print(requests.get('$url', proxies={'http': 'socks5://127.0.0.1:9050', 'https': 'socks5://127.0.0.1:9050'}).text.strip())")
+    local get_ip=$(curl --socks5 127.0.0.1:9050 -s https://www.myexternalip.com/raw)
     echo "$get_ip"
 }
 
 # Función para cambiar la IP
 change_ip() {
     sudo systemctl reload tor
-    echo "[+] Tu IP ha sido cambiada a: $(ma_ip)"
+    echo -e "${BLUE}[+] Tu IP ha sido cambiada a: $(ma_ip)${RESET}"
 }
 
-echo -e "\033[1;32;40m Cambia tus SOCKS a 127.0.0.1:9050 \n\033[0m"
+echo -e "${CYAN} Cambia tus SOCKS a 127.0.0.1:9050 ${RESET}"
 
 # Leer el tiempo y la cantidad de cambios
-read -p "[+] Tiempo para cambiar la IP en segundos [tipo=60] >> " x
-read -p "[+] ¿Cuántas veces quieres cambiar tu IP? [tipo=1000] para cambios infinitos de IP escribe [0] >> " lin
+read -p "${YELLOW}[+] Tiempo para cambiar la IP en segundos [tipo=60] >> ${RESET}" x
+read -p "${YELLOW}[+] ¿Cuántas veces quieres cambiar tu IP? [tipo=1000] para cambios infinitos de IP escribe [0] >> ${RESET}" lin
 
 # Cambiar IP en bucle
 if [ "$lin" -eq 0 ]; then
