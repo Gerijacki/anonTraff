@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Colores para el terminal
-RED='\033[1;31m'
-GREEN='\033[1;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[1;34m'
-CYAN='\033[1;36m'
-RESET='\033[0m'
+RED='\e[31m'
+GREEN='\e[32m'
+YELLOW='\e[33m'
+BLUE='\e[34m'
+CYAN='\e[36m'
+RESET='\e[0m'
 
 # Función para manejar la interrupción con Ctrl+C
 cleanup() {
@@ -68,9 +68,9 @@ TOR_STATUS=$(systemctl is-active tor)
 sudo systemctl start tor
 sleep 3
 
-# Función para obtener la IP externa
+# Función para obtener la IP externa usando curl
 ma_ip() {
-    local get_ip=$(curl --socks5 127.0.0.1:9050 -s https://www.myexternalip.com/raw)
+    local get_ip=$(curl --socks5 127.0.0.1:9050 -s https://api.ipify.org)
     echo "$get_ip"
 }
 
