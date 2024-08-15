@@ -83,8 +83,9 @@ change_ip() {
 echo -e "${CYAN}Cambia tus SOCKS a 127.0.0.1:9050${RESET}"
 
 # Leer el tiempo y la cantidad de cambios
-read -p "${YELLOW}[+] Tiempo para cambiar la IP en segundos [tipo=60] >> ${RESET}" x
-read -p "${YELLOW}[+] ¿Cuántas veces quieres cambiar tu IP? [tipo=1000] para cambios infinitos de IP escribe [0] >> ${RESET}" lin
+read -p "[+] Tiempo para cambiar la IP en segundos [tipo=60] >> " x
+read -p "[+] ¿Cuántas veces quieres cambiar tu IP? [tipo=1000] para cambios infinitos de IP escribe [0] >> " lin
+
 
 # Cambiar IP en bucle
 if [ "$lin" -eq 0 ]; then
