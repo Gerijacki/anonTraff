@@ -1,12 +1,12 @@
 #!/bin/bash
 
 # Colores para el terminal
-RED="\033[1;31m"
-GREEN="\033[1;32m"
-YELLOW="\033[1;33m"
-BLUE="\033[1;34m"
-CYAN="\033[1;36m"
-RESET="\033[0m"
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+CYAN='\033[1;36m'
+RESET='\033[0m'
 
 # Función para manejar la interrupción con Ctrl+C
 cleanup() {
@@ -33,8 +33,7 @@ echo -e "${CYAN}
 /_/   \_\_\__,_|_| |_| |_|\__,_|   |_|\__,_|_| |_||_|  |_|
 ${RESET}${RED}
               AnonTraff - Dynamic Tor IP Changer
-${RESET}${CYAN}
-"
+${RESET}"
 
 # Comprobar si pip3 está instalado
 if ! dpkg -s python3-pip &>/dev/null; then
@@ -81,7 +80,7 @@ change_ip() {
     echo -e "${BLUE}[+] Tu IP ha sido cambiada a: $(ma_ip)${RESET}"
 }
 
-echo -e "${CYAN} Cambia tus SOCKS a 127.0.0.1:9050 ${RESET}"
+echo -e "${CYAN}Cambia tus SOCKS a 127.0.0.1:9050${RESET}"
 
 # Leer el tiempo y la cantidad de cambios
 read -p "${YELLOW}[+] Tiempo para cambiar la IP en segundos [tipo=60] >> ${RESET}" x
